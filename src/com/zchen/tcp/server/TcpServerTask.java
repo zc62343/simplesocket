@@ -32,7 +32,7 @@ public class TcpServerTask implements Runnable {
 	/**
 	 * 默认端口
 	 */
-	private static final int defaultPort = 10000;
+	private static final int defaultPort = 15732;
 
 	private int threads;
 	private int port;

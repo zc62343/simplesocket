@@ -1,7 +1,8 @@
-package com.zchen.tcp.server;
+package com.zchen.tcp;
 
 import com.zchen.tcp.bean.RequestObj;
 import com.zchen.tcp.bean.ResponseObj;
+import com.zchen.tcp.server.ServerThread;
 import com.zchen.tcp.server.ServerThread.TcpCallBack;
 
 /**

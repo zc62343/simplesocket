@@ -32,7 +32,7 @@ public class TcpServer {
 	/**
 	 * 默认端口
 	 */
-	private static final int defaultPort = 10000;
+	private static final int defaultPort = 15732;
 
 	public void start() {
 		start(defaultPort, defaultThreads);
