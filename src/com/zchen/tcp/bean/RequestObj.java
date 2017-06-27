@@ -15,6 +15,13 @@ public class  RequestObj {
 
 	public byte[] bytes;
 	
+	public RequestObj() {}
+	
+	public RequestObj(String key) {
+		super();
+		this.key = key;
+	}
+
 	public String getKey() {
 		return key;
 	}
