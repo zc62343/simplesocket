@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 
 import com.zchen.tcp.bean.RequestObj;
 import com.zchen.tcp.bean.ResponseObj;
@@ -59,7 +60,6 @@ public class TcpClient {
 	}
 	
 	private static final int BUFFER_SIZE = 64 * 1024;//缓冲区大小
-	
 	/**
 	 * 发送Map<String,Object> 参数请求
 	 * @param <V>
@@ -84,7 +84,7 @@ public class TcpClient {
 		try {
 			SocketAddress serverAddr = new InetSocketAddress(ip, port);
 			client = new Socket();
-			client.connect(serverAddr, 500);
+			client.connect(serverAddr, 200);
 			if(!client.isConnected()) {
 				callback.failed(response);
 				return;//未连接上，直接返回
@@ -99,18 +99,21 @@ public class TcpClient {
 			byte[] send = req.toString().getBytes("UTF-8");
 			
 			dos.writeInt(send.length);//发送长度
+			dos.flush();
 			dos.write(send);//发送参数
+			dos.flush();
 			
 			if(streamByte != null){
 				dos.writeInt(1);//标识有一个字节数组需要传递
 				dos.writeInt(streamByte.length);//发送文件大小
+				dos.flush();
 				dos.write(streamByte);
 			}else{
 				dos.writeInt(0);
 			}
 			dos.flush();
 			streamByte = null;
-			System.gc();
+//			System.gc();
 			
 			int respLen = dis.readInt();//接收参数长度
 			byte[] bytes = new byte[respLen];
@@ -142,7 +145,7 @@ public class TcpClient {
 			response.bytes = respBytes;
 			
 			respBytes = null;
-			System.gc();
+//			System.gc();
 			
 			if(response.code == 200){
 				callback.success(response);
@@ -151,6 +154,8 @@ public class TcpClient {
 			}else{
 				callback.failed(response);
 			}
+		} catch (SocketTimeoutException e) {
+			callback.failed(response);//超时
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
