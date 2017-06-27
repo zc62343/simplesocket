@@ -67,7 +67,7 @@ public class ServerThread implements Runnable {
 			
 			request.bytes = streamByte;
 			streamByte = null;
-			System.gc();
+//			System.gc();
 			
 			try {
 				response = callback.execute(request);
@@ -84,11 +84,14 @@ public class ServerThread implements Runnable {
 				JSONObject resp = JSONObject.fromObject(response);
 				byte[] send = resp.toString().getBytes("UTF-8");
 				dos.writeInt(send.length);
+				dos.flush();
 				dos.write(send);
+				dos.flush();
 				
 				if(respBytes != null){
 					dos.writeInt(1);//标识有一个字节数组需要传递
 					dos.writeInt(respBytes.length);//发送文件大小
+					dos.flush();
 					dos.write(respBytes);
 				}else{
 					dos.writeInt(0);
@@ -96,7 +99,7 @@ public class ServerThread implements Runnable {
 				dos.flush();
 				
 				respBytes = null;
-				System.gc();
+//				System.gc();
 			}
 		} catch (IOException e) {
 			response.code = ResponseObj.SERVER_ERROR;
