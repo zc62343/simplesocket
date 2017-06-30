@@ -18,14 +18,14 @@ import net.sf.json.JSONObject;
  */
 public class ServerThread implements Runnable {
 
-	private TcpCallBack callback = null;
+	private IMessageHandler handler = null;
 	private Socket client = null;
 
 	private static final int BUFFER_SIZE = 64 * 1024;//缓冲区大小
 	
-	public ServerThread(Socket client, TcpCallBack callback) {
+	public ServerThread(Socket client, IMessageHandler handler) {
 		this.client = client;
-		this.callback = callback;
+		this.handler = handler;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class ServerThread implements Runnable {
 //			System.gc();
 			
 			try {
-				response = callback.execute(request);
+				response = handler.receiveMsg(request);
 				response.code = ResponseObj.SUCCESS;
 			} catch (Exception e) {
 				response.code = ResponseObj.SERVER_ERROR;
@@ -114,13 +114,5 @@ public class ServerThread implements Runnable {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	/**
-	 * 回调接口
-	 * @author zengchen
-	 */
-	public interface TcpCallBack {
-		public ResponseObj execute(RequestObj request);
 	}
 }

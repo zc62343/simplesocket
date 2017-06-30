@@ -2,17 +2,20 @@ package com.zchen.tcp.server;
 
 import com.zchen.tcp.bean.RequestObj;
 import com.zchen.tcp.bean.ResponseObj;
-import com.zchen.tcp.server.ServerThread.TcpCallBack;
 
 public class Demo {
 
 	public static void main(String[] args) {
 		TcpServer server = new TcpServer();
-		server.setCallback(new TcpCallBack() {
+		server.setHandler(new IMessageHandler() {
+			
 			@Override
-			public ResponseObj execute(RequestObj request) {
-				//业务代码
-				return null;
+			public ResponseObj receiveMsg(RequestObj request) {
+				ResponseObj response = new ResponseObj();
+				response.list = request.list;
+				response.map = request.map;
+//				response.bytes = request.bytes;
+				return response;
 			}
 		});
 		server.start();

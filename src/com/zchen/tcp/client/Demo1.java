@@ -1,14 +1,9 @@
 package com.zchen.tcp.client;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
-import org.apache.commons.io.FileUtils;
 
 import com.zchen.tcp.bean.RequestObj;
 import com.zchen.tcp.bean.ResponseObj;
@@ -70,18 +65,18 @@ public class Demo1 {
 		
 		req.list.addAll(lists);
 		
-		try {
-			req.bytes = FileUtils.readFileToByteArray(new File("d:/jdk.exe"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			req.bytes = FileUtils.readFileToByteArray(new File("d:/jdk.exe"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
-		for(int i=0; i<1; i++){
+		for(int i=0; i<500; i++){
 			final int index = i;
 			new Thread(){
 				@Override
 				public void run() {
-					TcpClient.send("192.168.2.196", 10000, req,new TcpClient.ClientCallbackWrap() {
+					TcpClient.send("192.168.2.196", 15732, req,new TcpClient.ClientCallbackWrap() {
 						@Override
 						public void success(ResponseObj response) {
 							System.out.println("index:"+index);
@@ -89,12 +84,12 @@ public class Demo1 {
 							System.out.println(response.msg);
 							System.out.println(response.map);
 							System.out.println(response.list);
-							try {
-								System.out.println(response.bytes.length);
-								FileUtils.writeByteArrayToFile(new File("d:/tcpfile/"+UUID.randomUUID().toString()+".exe"), response.bytes);
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+//							try {
+//								System.out.println(response.bytes.length);
+//								FileUtils.writeByteArrayToFile(new File("d:/tcpfile/"+UUID.randomUUID().toString()+".exe"), response.bytes);
+//							} catch (IOException e) {
+//								e.printStackTrace();
+//							}
 						}
 			
 						@Override

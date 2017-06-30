@@ -2,17 +2,16 @@ package com.zchen.tcp;
 
 import com.zchen.tcp.bean.RequestObj;
 import com.zchen.tcp.bean.ResponseObj;
-import com.zchen.tcp.server.ServerThread;
-import com.zchen.tcp.server.ServerThread.TcpCallBack;
+import com.zchen.tcp.server.IMessageHandler;
 
 /**
  * 处理客户端请求
  * @author zengchen
  */
-public class ServerCallBack implements TcpCallBack{
+public class ServerCallBack implements IMessageHandler{
 
 	@Override
-	public ResponseObj execute(RequestObj request){
+	public ResponseObj receiveMsg(RequestObj request){
 		System.out.println(request);
 		
 		ResponseObj response = new ResponseObj();

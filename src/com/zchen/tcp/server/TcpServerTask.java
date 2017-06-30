@@ -6,8 +6,6 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.zchen.tcp.server.ServerThread.TcpCallBack;
-
 /**
  * Tcp服务器
  * @author zengchen
@@ -23,7 +21,7 @@ import com.zchen.tcp.server.ServerThread.TcpCallBack;
  */
 public class TcpServerTask implements Runnable {
 
-	private TcpCallBack callback;
+	private IMessageHandler handler;
 	
 	/**
 	 * 默认线程数
@@ -50,18 +48,18 @@ public class TcpServerTask implements Runnable {
 		this.port = port;
 	}
 	
-	public TcpCallBack getCallback() {
-		return callback;
+	public IMessageHandler getHandler() {
+		return handler;
 	}
 
-	public void setCallback(TcpCallBack callback) {
-		this.callback = callback;
+	public void setHandler(IMessageHandler handler) {
+		this.handler = handler;
 	}
 
 	@Override
 	public void run() {
 		
-		if(callback == null){
+		if(handler == null){
 			return;
 		}
 		
@@ -71,7 +69,7 @@ public class TcpServerTask implements Runnable {
 		try {
 			server = new ServerSocket(port);
 			while((client = server.accept()) != null){//接收客户端连接
-				executorPool.submit(new ServerThread(client,callback));
+				executorPool.submit(new ServerThread(client,handler));
 			}
 		} catch (IOException e) {
 			System.out.println(e.toString());
